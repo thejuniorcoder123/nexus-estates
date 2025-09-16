@@ -1,22 +1,31 @@
-// src/components/Spinner.tsx
+// src/components/SimilarProperties.tsx
 
-"use client"; // This is the crucial directive
+import { getSimilarProperties } from '@/lib/data';
+import { Property } from '@/types';
+import PropertyCard from './PropertyCard';
 
-export const Spinner = () => (
-  <div style={{
-    border: '4px solid rgba(0, 0, 0, 0.1)',
-    width: '36px',
-    height: '36px',
-    borderRadius: '50%',
-    borderLeftColor: '#0061DF',
-    animation: 'spin 1s ease infinite',
-  }}>
-    {/* This style block is what requires "use client" */}
-    <style jsx>{`
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    `}</style>
-  </div>
-);
+interface SimilarPropertiesProps {
+  currentPropertyId: number;
+  propertyType: Property['propertyType'];
+}
+
+// This is an async Server Component that fetches its own data
+export default async function SimilarProperties({ currentPropertyId, propertyType }: SimilarPropertiesProps) {
+  const similarProperties = await getSimilarProperties({ currentPropertyId, propertyType });
+
+  // If no similar properties are found, don't render anything
+  if (similarProperties.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="similar-properties-section" style={{ marginTop: '50px', paddingTop: '30px', borderTop: '1px solid var(--border)' }}>
+      <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '30px' }}>Similar Properties</h2>
+      <div className="property-grid">
+        {similarProperties.map(property => (
+          <PropertyCard key={property.id} property={property} />
+        ))}
+      </div>
+    </div>
+  );
+}

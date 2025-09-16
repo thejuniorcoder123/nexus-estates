@@ -2,7 +2,9 @@
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Spinner } from '@/components/Spinner'; // 1. Import our new Spinner component
+// --- THIS IS THE FIX ---
+// We are changing from a named import { Spinner } to a default import Spinner
+import Spinner from '@/components/Spinner'; // 1. Import our new Spinner component
 
 // This file is now a pure Server Component again, which is correct.
 export default function PropertyLoading() {
@@ -13,7 +15,7 @@ export default function PropertyLoading() {
         {/* Skeleton for the image gallery */}
         <div style={{
           height: '500px',
-          width: '100%',
+          width: '10g0%',
           backgroundColor: '#E6E9EC',
           borderRadius: '8px',
           marginBottom: '30px',
@@ -21,7 +23,6 @@ export default function PropertyLoading() {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          {/* 2. Use the imported Spinner component */}
           <Spinner />
         </div>
 

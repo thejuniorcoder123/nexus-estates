@@ -5,10 +5,10 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getPropertyById } from '@/lib/data';
 import type { Metadata } from 'next';
-import SimilarProperties from '@/components/SimilarProperties';
 import ContactAgentForm from '@/components/ContactAgentForm';
 import PropertyGallery from '@/components/PropertyGallery';
-import Breadcrumbs from '@/components/Breadcrumbs'; // <-- NEW IMPORT
+import Breadcrumbs from '@/components/Breadcrumbs';
+import SimilarProperties from '@/components/SimilarProperties'; // <-- NEW IMPORT
 
 interface PropertyDetailsPageProps {
   params: {
@@ -37,11 +37,8 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
     notFound();
   }
 
-  // A helper function to truncate long property titles for the breadcrumb
   const truncate = (str: string, num: number) => {
-    if (str.length <= num) {
-      return str;
-    }
+    if (str.length <= num) { return str; }
     return str.slice(0, num) + '...';
   };
 
@@ -49,15 +46,11 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
     <>
       <Header />
       <main className="container" style={{ paddingTop: '40px' }}>
-        {/* --- NEW BREADCRUMBS COMPONENT ADDED HERE --- */}
         <Breadcrumbs
           items={[
             { label: 'Home', href: '/' },
-            { label: 'Properties', href: '/search' }, // This links back to the main search results page
-            {
-              label: truncate(property.title, 30), // The current page, not a link
-              href: `/property/${property.id}`,
-            },
+            { label: 'Properties', href: '/search' },
+            { label: truncate(property.title, 30), href: `/property/${property.id}` },
           ]}
         />
 
@@ -79,7 +72,6 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
           <div className="property-main">
             <h2>Overview</h2>
             <p>A beautiful {property.propertyType.toLowerCase()} located in a prime area. This property features {property.beds} bedrooms and {property.baths} bathrooms across {property.sqft} square feet of living space. Perfect for anyone looking for comfort and convenience.</p>
-
             <h2 style={{ marginTop: '30px' }}>Key Specifications</h2>
             <div className="specs-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '15px' }}>
               <div className="spec-item"><strong>Type:</strong> {property.propertyType}</div>
@@ -89,12 +81,12 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
               <div className="spec-item"><strong>Status:</strong> {property.status}</div>
             </div>
           </div>
-
           <div className="property-sidebar">
             <ContactAgentForm />
           </div>
         </div>
 
+        {/* --- NEW SIMILAR PROPERTIES COMPONENT ADDED HERE --- */}
         <SimilarProperties
           currentPropertyId={property.id}
           propertyType={property.propertyType}
