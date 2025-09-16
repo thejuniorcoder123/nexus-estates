@@ -8,7 +8,7 @@ const Footer: FC = () => {
       <div className="container">
         {/* You can add the full footer content from your HTML here if you want */}
         <div className="copyright">
-          &copy; {new Date().getFullYear()} Nexus Estates. All rights reserved.
+          &copy; {new Date().getFullYear()} Nexus Estates. All rights reserved-Harendra Yadav 
         </div>
       </div>
     </footer>
