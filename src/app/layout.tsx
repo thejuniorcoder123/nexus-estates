@@ -3,7 +3,8 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import { FavoritesProvider } from "@/context/FavoritesContext"; // 1. IMPORT
+import { FavoritesProvider } from "@/context/FavoritesContext";
+import { AuthProvider } from "@/context/AuthContext"; // IMPORT our new AuthProvider
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
@@ -24,10 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${montserrat.variable}`}>
-        {/* 2. WRAP children with the provider */}
-        <FavoritesProvider>
-          {children}
-        </FavoritesProvider>
+        {/* The AuthProvider now wraps everything */}
+        <AuthProvider>
+          <FavoritesProvider>
+            {children}
+          </FavoritesProvider>
+        </AuthProvider>
       </body>
     </html>
   );

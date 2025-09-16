@@ -1,29 +1,33 @@
 // src/components/PropertyCard.tsx
 
-"use client"; // This component now needs to be a client component for the button
+"use client";
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, MouseEvent } from 'react';
 import { Property } from '@/types';
-import { useFavorites } from '@/context/FavoritesContext'; // 1. IMPORT THE HOOK
+import { useFavorites } from '@/context/FavoritesContext';
 
 interface PropertyCardProps {
   property: Property;
 }
 
 const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
-  const { isFavorited, toggleFavorite } = useFavorites(); // 2. USE THE HOOK
+  const { isFavorited, toggleFavorite } = useFavorites();
 
   const handleFavoriteClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Prevent the Link from navigating
-    e.stopPropagation(); // Stop the event from bubbling up
+    e.preventDefault();
+    e.stopPropagation();
     toggleFavorite(property.id);
   };
 
+  // Ensure property.images is an array and has at least one image
+  const displayImage = (property.images && property.images.length > 0)
+    ? property.images[0]
+    : 'https://images.unsplash.com/photo-1570129477492-45c003edd2be'; // A fallback image
+
   return (
     <div className="property-card-container">
-      {/* 3. ADD THE FAVORITE BUTTON */}
       <button className="favorite-button" onClick={handleFavoriteClick}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFavorited(property.id) ? 'var(--accent)' : 'rgba(255,255,255,0.8)'} stroke="var(--secondary)" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 116.364 6.364L12 21.818l-7.682-7.136a4.5 4.5 0 010-6.364z" />
@@ -33,7 +37,7 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
       <Link href={`/property/${property.id}`} className="property-card">
         <div className="property-image">
           <Image
-            src={property.images[0]} // Always show the first image on the card
+            src={displayImage} // <-- THE FIX IS HERE
             alt={property.title}
             fill={true}
             style={{ objectFit: 'cover' }}

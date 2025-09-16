@@ -13,3 +13,9 @@ export interface Property {
   status: 'For Sale' | 'For Rent';
   propertyType: 'Apartment' | 'House' | 'Commercial';
 }
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  password?: string; // Password should always be optional on the client
+}
