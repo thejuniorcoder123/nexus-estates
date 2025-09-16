@@ -12,7 +12,11 @@ interface PropertyCardProps {
   property: Property;
 }
 
+// ==========================================================
+// THIS IS THE CORRECTED LINE - PLEASE ENSURE YOUR FILE MATCHES THIS EXACTLY
 const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
+// ==========================================================
+
   const { isFavorited, toggleFavorite } = useFavorites();
 
   const handleFavoriteClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -21,10 +25,10 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
     toggleFavorite(property.id);
   };
 
-  // Ensure property.images is an array and has at least one image
-  const displayImage = (property.images && property.images.length > 0)
-    ? property.images[0]
-    : 'https://images.unsplash.com/photo-1570129477492-45c003edd2be'; // A fallback image
+  const displayImage =
+    property.images && Array.isArray(property.images) && property.images.length > 0
+      ? property.images[0]
+      : 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80';
 
   return (
     <div className="property-card-container">
@@ -37,7 +41,7 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
       <Link href={`/property/${property.id}`} className="property-card">
         <div className="property-image">
           <Image
-            src={displayImage} // <-- THE FIX IS HERE
+            src={displayImage}
             alt={property.title}
             fill={true}
             style={{ objectFit: 'cover' }}

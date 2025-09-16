@@ -1,61 +1,68 @@
-// src/app/favorites/page.tsx
+// src/components/PropertyCard.tsx
 
 "use client";
 
-import { useFavorites } from '@/context/FavoritesContext';
-import { getPropertyById } from '@/lib/data'; // We can reuse this function
+import Image from 'next/image';
+import Link from 'next/link';
+import { FC, MouseEvent } from 'react';
 import { Property } from '@/types';
-import { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import PropertyCard from '@/components/PropertyCard';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import { useFavorites } from '@/context/FavoritesContext';
 
-export default function FavoritesPage() {
-  const { favoriteIds } = useFavorites();
-  const [favoriteProperties, setFavoriteProperties] = useState<Property[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+interface PropertyCardProps {
+  property: Property;
+}
 
-  useEffect(() => {
-    // This function fetches the full details for each favorited property
-    const fetchFavoriteProperties = async () => {
-      setIsLoading(true);
-      // Create an array of promises
-      const propertyPromises = favoriteIds.map(id => getPropertyById(id));
-      // Wait for all promises to resolve
-      const properties = await Promise.all(propertyPromises);
-      // Filter out any undefined results (if a property was deleted)
-      setFavoriteProperties(properties.filter(p => p !== undefined) as Property[]);
-      setIsLoading(false);
-    };
+// THIS IS THE CRITICAL LINE THAT MUST BE CORRECT
+// It must be `({ property }) => {`
+const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
+  const { isFavorited, toggleFavorite } = useFavorites();
 
-    fetchFavoriteProperties();
-  }, [favoriteIds]); // Rerun whenever the list of favorite IDs changes
+  const handleFavoriteClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(property.id);
+  };
+
+  // A robust check to ensure the image can be displayed safely
+  const displayImage =
+    property.images && Array.isArray(property.images) && property.images.length > 0
+      ? property.images[0]
+      : 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80'; // A generic fallback house image
 
   return (
-    <>
-      <Header />
-      <main className="container" style={{ paddingTop: '40px' }}>
-        <Breadcrumbs
-          items={[
-            { label: 'Home', href: '/' },
-            { label: 'Favorites', href: '/favorites' },
-          ]}
-        />
-        <h1 style={{ marginBottom: '30px' }}>Your Favorite Properties</h1>
-        {isLoading ? (
-          <p>Loading your favorites...</p>
-        ) : favoriteProperties.length > 0 ? (
-          <div className="property-grid">
-            {favoriteProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
-            ))}
+    <div className="property-card-container">
+      <button className="favorite-button" onClick={handleFavoriteClick}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFavorited(property.id) ? 'var(--accent)' : 'rgba(255,255,255,0.8)'} stroke="var(--secondary)" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 116.364 6.364L12 21.818l-7.682-7.136a4.5 4.5 0 010-6.364z" />
+        </svg>
+      </button>
+
+      <Link href={`/property/${property.id}`} className="property-card">
+        <div className="property-image">
+          <Image
+            src={displayImage}
+            alt={property.title}
+            fill={true}
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+          {property.badge && <div className="property-badge">{property.badge}</div>}
+        </div>
+        <div className="property-content">
+          <div className="property-price">{property.price}</div>
+          <h3 className="property-title">{property.title}</h3>
+          <div className="property-address">
+            <i style={{ marginRight: '5px' }}>📍</i> {property.address}
           </div>
-        ) : (
-          <p>You haven't saved any favorites yet. Click the heart icon on any property to add it here.</p>
-        )}
-      </main>
-      <Footer />
-    </>
+          <div className="property-features">
+            <span>{property.beds} Beds</span>
+            <span>{property.baths} Baths</span>
+            <span>{property.sqft} sq.ft</span>
+          </div>
+        </div>
+      </Link>
+    </div>
   );
-}
+};
+
+export default PropertyCard;

@@ -77,7 +77,7 @@ const properties: Property[] = [
     baths: 2,
     sqft: 1100,
     images: [
-      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto-format&fit=crop&w=1170&q=80',
       'https://images.unsplash.com/photo-1494203484021-3c454daf695d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
     ],
     badge: 'New',
@@ -122,7 +122,7 @@ const properties: Property[] = [
     baths: 2,
     sqft: 5000,
     images: [
-      'https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto-format&fit=crop&w=1170&q=80'
+      'https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
     ],
     badge: 'New',
     status: 'For Rent',
@@ -169,13 +169,13 @@ export const getPropertyById = async (id: number): Promise<Property | undefined>
   return properties.find(p => p.id === id);
 };
 
-// --- THIS IS THE NEW FUNCTION ---
+// --- THIS IS THE FIX ---
+// The filtering logic here was correct, but I am providing the whole function
+// to ensure it's exactly as it should be. The key is that `properties.filter`
+// returns the *entire* property object, which includes the `images` array.
 export const getSimilarProperties = async ({ currentPropertyId, propertyType }: { currentPropertyId: number; propertyType: Property['propertyType']; }): Promise<Property[]> => {
-  // Find all properties of the same type, excluding the current one
   const similar = properties.filter(p =>
     p.propertyType === propertyType && p.id !== currentPropertyId
   );
-
-  // Return the first 3 matches
   return similar.slice(0, 3);
 };

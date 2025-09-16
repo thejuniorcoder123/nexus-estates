@@ -902,3 +902,81 @@
 .favorite-button:hover svg {
   transform: scale(1.1);
 }
+/* --- Embla Carousel Styles --- */
+.embla {
+  position: relative;
+  padding: 0 40px; /* Space for the buttons */
+  margin: 30px 0 50px;
+}
+
+.embla__viewport {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+  gap: 25px; /* Same gap as our property-grid */
+}
+
+.embla__slide {
+  flex: 0 0 30%; /* On desktop, show about 3 slides */
+  min-width: 0;
+  padding-left: 10px; /* Gutter between slides */
+}
+
+/* Adjust slide width for different screen sizes */
+@media (max-width: 1200px) {
+  .embla__slide {
+    flex-basis: 45%;
+  }
+}
+@media (max-width: 768px) {
+  .embla__slide {
+    flex-basis: 80%;
+  }
+}
+@media (max-width: 480px) {
+    .embla {
+        padding: 0; /* Remove padding on smallest screens */
+    }
+    .embla__slide {
+        flex-basis: 90%;
+    }
+}
+
+
+/* Carousel Buttons */
+.embla__prev,
+.embla__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+
+.embla__prev {
+  left: 0;
+}
+
+.embla__next {
+  right: 0;
+}
+
+.embla__prev:hover,
+.embla__next:hover {
+  background-color: var(--white);
+  border-color: var(--primary);
+  color: var(--primary);
+}
