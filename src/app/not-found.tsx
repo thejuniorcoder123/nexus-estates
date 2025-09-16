@@ -18,17 +18,20 @@ export default function NotFound() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          minHeight: 'calc(100vh - 200px)' // Adjust based on header/footer height
+          minHeight: 'calc(100vh - 200px)'
         }}
       >
         <h1 style={{ fontSize: '6rem', color: '#0D263B', margin: 0 }}>404</h1>
         <h2 style={{ fontSize: '1.5rem', color: '#0D263B', marginTop: '10px' }}>Page Not Found</h2>
+        {/*
+          THE FIX IS HERE: "We're" is now "We&apos;re"
+        */}
         <p style={{ color: '#696969', marginTop: '20px', maxWidth: '400px' }}>
-          We're sorry, the page you requested could not be found. It might have been moved or deleted.
+          We&apos;re sorry, the page you requested could not be found. It might have been moved or deleted.
         </p>
         <Link
           href="/"
-          className="post-property-btn" // Re-using an existing style for the button
+          className="post-property-btn"
           style={{ marginTop: '30px', textDecoration: 'none' }}
         >
           Return to Homepage
