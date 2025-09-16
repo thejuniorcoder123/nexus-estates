@@ -8,8 +8,8 @@ export interface Property {
   beds: number;
   baths: number;
   sqft: number;
-  image: string;
+  images: string[]; // CHANGED from 'image: string'
   badge?: string;
-  status: 'For Sale' | 'For Rent'; // New: To filter Buy/Rent
-  propertyType: 'Apartment' | 'House' | 'Commercial'; // New: To filter by type
+  status: 'For Sale' | 'For Rent';
+  propertyType: 'Apartment' | 'House' | 'Commercial';
 }

@@ -6,31 +6,29 @@ import Footer from '@/components/Footer';
 import PropertyCard from '@/components/PropertyCard';
 import { getProperties, PropertyFilters } from '@/lib/data';
 import PaginationControls from '@/components/PaginationControls';
+import Breadcrumbs from '@/components/Breadcrumbs'; // 1. IMPORT
 
 interface SearchPageProps {
   searchParams: PropertyFilters;
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  // Parse the page number from the URL search parameters, defaulting to 1
   const page = parseInt(searchParams.page ?? '1', 10);
-  const limit = 4; // This must match the limit set in the getProperties function
-
-  // Call our updated data function, which now returns an object
+  const limit = 4;
   const { properties, total } = await getProperties(searchParams);
-
-  // Calculate the total number of pages needed
   const totalPages = Math.ceil(total / limit);
 
   return (
     <>
       <Header />
       <main className="container" style={{ paddingTop: '40px' }}>
-        <div style={{ marginBottom: '20px' }}>
-          <Link href="/" style={{ textDecoration: 'underline' }}>
-            &larr; Back to Home
-          </Link>
-        </div>
+        {/* 2. ADD THE BREADCRUMBS COMPONENT */}
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Search', href: '/search' },
+          ]}
+        />
 
         <h1 style={{ marginBottom: '10px' }}>Search Results</h1>
         <p style={{ color: '#696969', marginBottom: '30px' }}>
@@ -47,7 +45,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <p>No properties found on this page. Try adjusting your search filters.</p>
         )}
 
-        {/* Render the pagination controls, passing the necessary props */}
         <PaginationControls currentPage={page} totalPages={totalPages} />
       </main>
       <Footer />
