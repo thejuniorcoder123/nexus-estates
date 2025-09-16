@@ -5,15 +5,22 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PropertyCard from '@/components/PropertyCard';
 import { getProperties, PropertyFilters } from '@/lib/data';
+import PaginationControls from '@/components/PaginationControls';
 
-// Server Components in the App Router receive searchParams as a prop
 interface SearchPageProps {
   searchParams: PropertyFilters;
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  // Fetch properties based on the URL query parameters
-  const filteredProperties = await getProperties(searchParams);
+  // Parse the page number from the URL search parameters, defaulting to 1
+  const page = parseInt(searchParams.page ?? '1', 10);
+  const limit = 4; // This must match the limit set in the getProperties function
+
+  // Call our updated data function, which now returns an object
+  const { properties, total } = await getProperties(searchParams);
+
+  // Calculate the total number of pages needed
+  const totalPages = Math.ceil(total / limit);
 
   return (
     <>
@@ -27,18 +34,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
         <h1 style={{ marginBottom: '10px' }}>Search Results</h1>
         <p style={{ color: '#696969', marginBottom: '30px' }}>
-          Found <strong>{filteredProperties.length}</strong> properties matching your criteria.
+          Found <strong>{total}</strong> properties matching your criteria.
         </p>
 
-        {filteredProperties.length > 0 ? (
+        {properties.length > 0 ? (
           <div className="property-grid">
-            {filteredProperties.map((property) => (
+            {properties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
         ) : (
-          <p>No properties found. Try adjusting your search filters.</p>
+          <p>No properties found on this page. Try adjusting your search filters.</p>
         )}
+
+        {/* Render the pagination controls, passing the necessary props */}
+        <PaginationControls currentPage={page} totalPages={totalPages} />
       </main>
       <Footer />
     </>

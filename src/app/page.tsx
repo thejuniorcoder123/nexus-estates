@@ -7,7 +7,10 @@ import SearchWidget from '@/components/SearchWidget';
 import { getProperties } from '@/lib/data';
 
 export default async function Home() {
-  const properties = await getProperties();
+  // --- THIS IS THE FIX ---
+  // We now expect an object, so we destructure `properties` from the result.
+  // We don't need the 'total' count here, so we can ignore it.
+  const { properties } = await getProperties();
 
   return (
     <>
@@ -24,6 +27,9 @@ export default async function Home() {
         <div className="container">
           <h2 className="section-title">Featured Properties</h2>
           <div className="property-grid">
+            {/*
+              This line now works correctly because `properties` is the array again.
+            */}
             {properties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
