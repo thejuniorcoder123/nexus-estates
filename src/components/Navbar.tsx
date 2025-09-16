@@ -1,12 +1,10 @@
 // src/components/Navbar.tsx
-
 "use client";
 
 import Link from 'next/link';
 import { useState } from 'react';
 
 const Navbar = () => {
-  // State to manage whether the mobile menu is open or not
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -21,6 +19,7 @@ const Navbar = () => {
           <ul className="nav-links">
             <li><Link href="/search?status=Buy">Buy</Link></li>
             <li><Link href="/search?status=Rent">Rent</Link></li>
+            <li><Link href="/favorites">Favorites</Link></li> {/* ADDED LINK */}
             <li><Link href="#">Contact Us</Link></li>
           </ul>
           <div className="auth-buttons">
@@ -38,11 +37,11 @@ const Navbar = () => {
       </div>
 
       {/* --- Mobile Menu Panel --- */}
-      {/* This menu slides in or appears when the hamburger is clicked */}
       <div className={`nav-menu-mobile ${isMenuOpen ? 'open' : ''}`}>
         <ul className="nav-links-mobile">
           <li><Link href="/search?status=Buy" onClick={() => setIsMenuOpen(false)}>Buy</Link></li>
           <li><Link href="/search?status=Rent" onClick={() => setIsMenuOpen(false)}>Rent</Link></li>
+          <li><Link href="/favorites" onClick={() => setIsMenuOpen(false)}>Favorites</Link></li> {/* ADDED LINK */}
           <li><Link href="#" onClick={() => setIsMenuOpen(false)}>Contact Us</Link></li>
         </ul>
         <div className="auth-buttons-mobile">
